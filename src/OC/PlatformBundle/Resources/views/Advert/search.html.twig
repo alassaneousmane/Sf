@@ -1,0 +1,37 @@
+{# src/OC/PlatformBundle/Resources/views/Advert/search.html.twig #}
+
+{% if data|length > 0 %}
+{% for advert in data %}
+     <div class="display-box-advert">
+             <a href="{{ path('oc_platform_view', {id: advert.id })}}" style="text-decoration: none; font-family: Arial">
+                <img src="{% if advert.image is not null %} {{ asset(advert.image.webPath) }}" alt="{{  advert.image.alt }}" title="{{ advert.image.alt ~ "-" ~ advert.image.id }}" height="25px" width="25px" class="img-circle" /> 
+                {% endif %} &nbsp;  <strong>{{ advert.author }}</strong> <br>
+
+                <span style=" margin-left: 40px; margin-top: -40px; font-size: 11px">{{ advert.email }}</span><br>
+                <span style=" margin-left: 40px; margin-top: -40px; font-size: 11px">{{ advert.date|localizeddate('medium', 'none') }}</span><br>
+
+                {% if advert.nbApplications != 0 %}                               
+                <span style=" margin-left: 40px; margin-top: -40px; font-size: 11px">{{ advert.nbApplications }} {{ "personnes ont postulé"|trans }}</span><br>
+                {% else %}
+                        <span style=" margin-left: 40px; margin-top: -40px; font-size: 11px">{{ "Aucune candidature"|trans }}</span><br>                         
+                {% endif %}
+                {# Affichage des catégories de l'annonce ici #}
+                {% if not advert.categories.empty %}
+                 <span style=" margin-left: 40px; margin-top: -40px; font-size: 11px"> 
+                 {% if advert.categories|length == 1 %}
+                     {%  for category in advert.categories %}
+                       {{ category.name }} {% if not loop.last %}, {% endif %}
+                       {% if loop.last %}<strong>.</strong>{% endif %}
+                     {% endfor %}  </span><br>
+                                   
+                 {% endif %}
+                
+                {% endif %}                
+              </a>
+      </div>
+{% endfor %}
+{% else %}
+  <div class="display-box-advert">
+            <p style="padding: 2px; padding-left: 5px"> Aucune correspondance trouvée.</p>
+      </div>
+{% endif %}

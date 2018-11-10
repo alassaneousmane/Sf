@@ -1,0 +1,8 @@
+oc_core_homepage:
+    path:     /
+    defaults:
+         _controller: OCCoreBundle:Default:index 
+oc_core_contactpage:
+  path:    /contactez-nous
+  defaults:
+      _controller: OCCoreBundle:Default:contact

@@ -1,0 +1,23 @@
+Accueil: Home
+Bonjour: 'Hello %name% %prenom%!'
+'Au revoir': Bye
+'Traduire ce texte en français': 'Translate this text in french'
+site.devise: 'The website where you learn it all... from scratch'
+'Retour à la liste': 'Return to list'
+'Modifier l''annonce': 'Edit advert'
+'Supprimer l''annonce': 'Delete this advert'
+'Ajouter d''annonces': 'Add advert'
+'Aujourd''hui nous sommes le': 'Today is'
+Terminal: Console
+Cours: Course
+'Aucune candidature': 'No applicant'
+OCPlatformEchange: eXchangeIdeaPlatform
+'personnes ont postulé': 'persons are submitted'
+charte.titre: 'Mentions légales'
+charte.donnee.0: "OpenClassrooms recueille des informations (login, e-mail) lors de votre enregistrement en tant que membre du site. Lors de votre connexion au site, un fichier \"log\" stocke les actions effectuées par votre ordinateur (via son adresse IP) au serveur.\n"
+charte.donnee.1: "\nLorsque que vous vous connectez en tant que membre de OpenClassrooms et\nque vous cochez la case correspondante, un cookie est envoyé à votre\nordinateur afin qu'il se souvienne de votre login et de votre mot de\npasse. Ceci vous est proposé uniquement afin d'automatiser la\nprocédure de connexion, et n'est en aucun cas utilisé par Simple IT à\nd'autres fins.\n"
+charte.donnee.2: "Merci de votre attention\n"
+charte.donnee.3: "Ousmane ALASSANE\n"
+Hello: __Hello
+Bye: __Bye
+'Translate this text in french': '__Translate this text in french'

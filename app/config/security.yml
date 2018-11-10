@@ -1,0 +1,59 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/security.html
+security:
+    encoders: # Pour encoder les mots de passe de nos utilisateurs
+        OC\UserBundle\Entity\User:                 sha512
+
+
+    role_hierarchy: # Les noms des rôles doivent commencer par ROLE_ tout simplement
+        ROLE_ADMIN:             [ROLE_AUTEUR, ROLE_MODERATEUR]
+        ROLE_SUPER_ADMIN:       [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+    providers: # Les providers sont des fournisseurs d'utilisateurs et d'authentificateurs
+        main:
+            id: fos_user.user_provider.username
+            #entity: #Type de provider, définit la classe à utiliser pour récupérer et identifier les utilisateurs
+            #    class:        OC\UserBundle\Entity\User
+            #   property:     username 
+      # in_memory: # Le provider in_memory définit les users directement ici
+       #     memory:
+        #        users: # On définit deux users "user" et "admin" avec leurs mots de passe
+       #             user:  { password: userpass, roles: [ 'ROLE_USER' ]    }
+        #            admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ]  }
+
+
+    firewalls: #Vérifie que vous êtes bien celui que vous prétendez être
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        # On crée un pare-feu uniquement pour nos formulaires
+        main_login:
+            pattern:    ^/login$
+            anonymous:    true          # On autorise donc les anonymes sur ce pare-feu
+
+        main:                           # __Nom__parefeu__
+            pattern:    ^/              # Toutes les urls commençant par / sont derrières le pare-feu main
+            anonymous:  false           # On bloque les utilisateurs anonymes,ici
+            provider:   main            # Fournisseur d'utilisateurs pour ce parefeu
+            form_login:                 # Méthode d'authentification
+                login_path: fos_user_security_login       # Route du formulaire de connexion
+                check_path: fos_user_security_check       # Route de validation du formulaire, route qui permet l'authentification au pare-feu
+            logout:
+                path:        fos_user_security_logout      # Route à laquelle le visiteur doit aller pour se déconnecter
+                target:      /{_locale}/platform   # Redirection sur cette page après deconnexion
+            remember_me:
+                secret:      %secret%    #%secret% est un paramètre de paramters.yml
+
+            # activate different ways to authenticate
+
+            # http_basic: ~
+            # http://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: ~
+            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+
+    access_control: # Notre contrôle d'accès pour vérifier les autorisations->securise les urls
+        - { path: ^/admin, ip: 127.0.0.1, requires_channel: https, roles: ROLE_ADMIN }

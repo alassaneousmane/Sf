@@ -1,0 +1,310 @@
+{# app/Resources/views/layout.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{% block title %}OC Plateforme{% endblock %}</title>
+  {% block favicon %}
+      <link rel="icon" href="https://bolt.cm/theme/bolt-v300/images/symfony_logo.png?59b03a9be7" type="image/png" />
+  {% endblock %}
+
+  {% block stylesheets %}
+    {# On charge le CSS de bootstrap depuis le site directement #}
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">   
+  {% endblock %}
+
+  {% stylesheets filter='cssrewrite, ?scssphp'
+    'bundles/ocplatform/css/*'
+    'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'
+  %}
+  <link rel="stylesheet" href="{{ asset_url }}" type="text/css">
+  {% endstylesheets %}
+
+</head>
+
+<body>
+
+    {% block navbar %}
+           <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+           <a class="navbar-brand"> {{ "OCPlatformEchange"|trans }} </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+           <li role="presentation"> <a href="{{ path('oc_core_homepage') }}" > {{ 'Home'|trans }}</a></li>
+            <li role="presentation"><a href="{{ path('oc_platform_home') }}">{{ 'Go to the platform'|trans }}</a></li>
+            <li><a href="{{ path('oc_platform_list_adverts') }}">{{ 'List adverts with applicants'|trans }}</a></li>
+            <li role="presentation"><a href="{{ path('oc_core_contactpage') }}">{{ 'Contact'|trans }}</a></li>
+            <li><a href="#">Help</a></li>
+          </ul>
+
+        {# Un champ de recherche à insérer ici 
+        style="position: absolute; margin-top: 24px; top: 25px; left: 351px; width: 19%; border-radius: 0px"
+        #}
+        {% block searchbox %}
+            <form action="" class="navbar-form navbar-right" >
+                <input type="text" class="form-control" style="border-radius: 0; color:rbg(117, 2, 42)"; placeholder=" {% if listAdverts is defined %} {% if listAdverts|length == 0 %} Aucune annonce pour le moment  {% elseif listAdverts|length == 1%} Chercher l'annonce disponible {% else %} {{ listAdverts|length }} disponibles{% endif %} {% else %} Entrer votre recherche ici{% endif %}"; width="60%" id="searchbox">
+            </form>
+            <div id="display-results">
+
+            </div>
+        {% endblock %}
+
+        </div>
+      </div>
+    </nav>
+     {% endblock %}       
+
+  <div class="container-fluid">
+  <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar" style="margin-top: -50px">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">Annonces <span class="sr-only">(current)</span></a></li>
+              {% block advert_side %}
+                  
+              {% endblock %}
+          </ul>
+         
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="margin-top: -690px">
+          <h1 class="page-header">Annonces en vrac</h1>
+
+          <div class="row placeholders">
+          
+          {% block advert_vrac %}
+              
+          {% endblock %}
+                        
+          </div>
+
+          <h2 class="sub-header">Annonces</h2>
+          {% block annonces_for_table %}
+              
+          {% endblock %}
+          
+        </div>
+      </div>
+
+
+    {% block flashBag %}
+      <div>
+    {# for message in app.session.flashbag.get('info') %}
+      <div class="alert alert-info" role="alert"><strong>Message flash :: </strong>  {{ message }} </div>
+    {% endfor #}
+  </div>
+    {% endblock %}
+
+
+    <div id="header" class="jumbotron" style="margin-top: 80px; border-radius: 0">
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+    {% block form_login_box %}
+
+    {% endblock %}
+    {% endif %}
+     <p> {{ "Aujourd'hui nous sommes le"|trans }} {{ 'now'|localizeddate('full', 'none') }} et il est {{ 'now'|localizeddate('none', 'medium') }} <br>
+       {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            Connecté en tant que {{ app.user.username }} <br>
+            <a href="{{ path('fos_user_security_logout') }}"> Se déconnecter </a>
+            {% else %}
+             <a href="{{ path('fos_user_security_login') }}"> Se connecter </a>
+            {% endif %}
+     </p>
+     <hr>
+      <h1> {% trans %}<div id="secretary-text">My advert online support </div>{% endtrans %}</h1>
+      <p>
+          {% trans %}
+        This project is lead by Symfony,
+        and build with MOOC OpenClassrooms and SensioLabs.
+          {% endtrans %}
+          {{ 'site.devise'|trans }}
+      </p>
+      <p>
+        <a class="btn btn-primary btn-lg" href="{{ path('oc_platform_purge', {'days': 20}) }}" style="border-radius: 5" target="_blank">
+          {{ 'Delete adverts without applicants'|trans }} »
+        </a>
+         <a class="btn btn-success btn-lg" href="https://openclassrooms.com/courses/developpez-votre-site-web-avec-le-framework-symfony/creer-des-formulaires-avec-symfony" target="_blank" style="border-radius: 5px">
+          {{ 'Participate with MOOC'|trans  }} »
+        </a>
+
+        {# On n'affiche le lien d'ajout d'annonces qu'aux auteurs et admins évidemment
+         IS_GRANTED() EST UN RACCOURCI POUR EXECUTER isGranted() du
+          service security.authorization_checker
+          #}
+        {% if is_granted('ROLE_AUTEUR') %}
+        <a class="btn btn-danger btn-lg" href="{{ path('oc_platform_add')}}" style="border-radius: 5px">
+           {{ 'Add advert'|trans({}, 'messages')  }} +
+        </a>
+        {% endif %}
+        <a href="http://localhost/Sf/web/app_dev.php/_console" class="btn btn-default btn-lg" target="_blank" style="border-radius: 5px">{{ 'Console'|trans({}, 'messages') }}</a>
+
+         <a href="{{ path('oc_course_homepage')}}" class="btn btn-info btn-lg" target="_blank" style="border-radius: 5px">{{ 'Course'|trans({}, 'messages') }}</a>
+
+      </p>
+    </div>
+
+    {% block displayAdverts %}
+    <div class="row">
+      <div class="col-sm-3">
+
+      </div>
+      <div class="col-sm-9">
+        {% block form_security %}
+
+        {% endblock %}
+      </div>
+    </div>
+      <div class="row">
+        <div id="menu" class="col-md-3">
+           <h4>Dernières annonces - Platforme - Annonces</h4>
+           {{ render(controller("OCPlatformBundle:Advert:menu", {'limit': 16})) }}        
+        </div>
+        {% block content %}
+        <div class="col-md-9">
+        {% block adverts_list %}
+              <div class="alert alert-success">
+             Concrètement, cela veut dire que vous ne devez pas faire la moindre requête SQL ailleurs que dans un repository, c'est la règle. <br/>
+             <p>Doctrine Language Query DQL : SELECT a FROM OCPlatformBundle:Advert a;</p>
+             <p>QueryBuilder : $queryBuilder->select('a')->from('OCPlatformBundle', 'a')->andWhere('champ = 1');</p>
+             <p>La méthode getResult() retourne toujours un tableau d'objets.getArrayResult() retourne lui un simple tableau de résultats et pas un objet.getScalair() retourne les résultats sous forme de valeurs.On peut utiliser cette méthode lorsqu'on a une valeur valeur à retourner comme avec SELECT COUNT(*) FROM ...
+              $values = $qb-getQuery()->getScalairResult(); foreach($values as $value) {
+              $value } getOneOrNullResult()<br>
+             getSingleResult() retourne un seul résultat <br>
+             getSingleScalairResult() retourne un résultat valeur <br>
+
+           </p>
+           <p>
+             <h4>Conditions générales d'utilisations</h4>
+             {% for i in 0..2 %}
+                 <p>{{('charte.donnee.' ~ i )|trans }}</p>
+             {% endfor %}
+           </p>
+          </div>
+        {% endblock %}
+
+          {% block contact %}{% endblock %}
+        </div>
+      {% endblock %}
+        {% block annonces %}{% endblock %}
+
+      <div id="content" class="col-md-9">
+        {% block body %}
+        {% endblock %}
+      </div>
+    </div>
+    {% endblock %}
+
+    <hr>
+
+    <footer>
+      <p>The sky's the limit © {{ 'now'|date('Y') }} and beyond.&nbsp;
+      2017-Ousmane ALASSANE - Dév Python -Symfony-Laravel-soon </p>
+
+    </footer>
+  </div>
+
+{#   'https://use.fontawesome.com/2f2399c73e.js'#}
+  {% javascripts filter='jsqueeze'
+    '//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'
+    'http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js'
+    '//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'  
+    'bundles/ocplatform/js/*'
+   %}
+  <script src={{ asset_url }} type="text/javascript"></script>
+  
+  {% endjavascripts %}
+
+ <script>
+ $(document).ready(function()
+ {
+   
+   $('input#searchbox').on('keyup', function()
+  {
+      var query = $(this).val();
+     
+
+       if(query.length > 0)
+       {
+           $.ajax({
+               type: 'POST',
+               url: "{{ path('oc_platform_search_ajax') }}",
+               data: {
+                   query: query
+               },
+               beforeSend: function()
+               {
+                   $('#display-results').html(' <span style="margin-left: 50px" id="spinner"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i>&nbsp;Recherche en cours</span>').show();
+               },
+               error: function () {
+                   $('#display-results').html(' <span style="margin-left: 50px"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i>&nbsp;Recherche en cours</span>').show();
+
+               },
+               success: function(data) {
+                if(data != ' ') {
+                  $('#display-results').html(data).show().css('width', '246px');
+                  $('#spinner').hide();
+                    $('.display-box-advert').css({
+                        'padding': '4px',
+                        'border-top': '1px solid #dedede',
+                        'hauteur': '70px',
+                        'font-size': '14px',
+                        'background-color': 'white',
+                        'position': 'relative',
+                        'display': 'block'
+                    });
+                    $('.display-box-advert').on('mouseenter', function () {
+
+                        $(this).css({
+                            'background-color': '#3b5998',
+                            'color': 'white',
+                            'cursor': 'pointer'
+                        });
+                    });
+                    $('.display-box-advert a').css({
+                        'color': '#333',
+                        'text-decoration': 'none'
+                    });
+                    $('.display-box-advert a').on('mouseenter', function() {
+                        $(this).css({
+                            'color': 'white',
+                            'text-decoration': 'none'
+                        });
+                    });
+                    $('.display-box-advert a').on('mouseleave', function() {
+                        $(this).css({
+                            'color': '#333',
+                            'text-decoration': 'none'
+                        });
+                    });
+
+                    $('.display-box-advert').on('mouseleave', function () {
+
+                        $(this).css({
+                            'background-color': '#fff',
+                            'color': 'black'
+                        });
+
+
+                    });
+                } else {
+                    $('#display-results').html(' <span style="margin-left: 70px"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Recherche en cours</span>').show();
+
+                }
+               }
+           });
+       }
+
+  });
+ });
+ </script>
+ 
+</body>
+</html>

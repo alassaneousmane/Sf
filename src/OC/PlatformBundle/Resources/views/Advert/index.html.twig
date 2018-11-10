@@ -1,0 +1,98 @@
+{# src/OC/PlatformBundle/Resources/views/Advert/index.html.twig #}
+
+{% extends "OCPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  Accueil - {{ parent() }} {{ "(" ~ listAdverts|length ~ " annonces publiées)" }}
+{% endblock %}
+
+{% block searchbox %}
+    {{ parent() }}
+{% endblock %}
+ {% block annonces_for_table %}
+     <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Title</th>
+                  <th>Author</th>
+                  <th>IP</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                 {% for advert in listAdverts %}
+                      <tr>
+                      <td>{{ advert.id }}</td>
+                      <td>{{ advert.title }}</td>
+                      <td>{{ advert.author }}</td>
+                      <td>{{ advert.ip }}</td>
+                      <td>{{ advert.email }}</td>
+                    </tr>
+                 {% endfor %}                
+              </tbody>
+            </table>
+          </div>
+ {% endblock %}
+
+{% block ocplatform_body %} <!-- On réutilise ce bloc de nouveau -->
+
+
+  <h2>Liste des annonces</h2>
+
+  <ol>
+    {% for advert in listAdverts %}
+      <li>
+        <a href="{{ path('oc_platform_view', {'id': advert.id}) }}" title="{{ advert.author ~ " - " ~ advert.title ~ " - " ~ advert.date|localizeddate('medium', 'none') }}">
+         {{ advert.title }}
+        </a>
+        par {{ advert.author }},
+        le {{ advert.date|localizeddate('medium', 'none') }} - {% if advert.nbApplications == 0 %} Pas de postulants {% else %} {{ advert.nbApplications }} candidatures {% endif %} - {{ advert.slug }}
+      </li>
+    {% else %}
+      <li>Pas (encore !) d'annonces</li>
+    {% endfor %}
+  </ol>
+
+  {# Partie pagination #}
+  <ul class="pagination">
+    {% for p in range(1, nbPages) %}
+        <li {% if p == page %} class="active" {% endif %}>
+          <a href="{{ path('oc_platform_home', {'page' : p}) }}"> {{ p }}</a>
+        </li>
+    {% endfor %}
+  </ul>
+  <ol>
+    {# Liste des annonces crées par OussouToure #}
+    <hr>
+     <h4>Liste des annonces OussouToure </h4>
+    {% for advert in listAdvertOussou %}
+      <li>
+        <a href="{{ path('oc_platform_view', {'id' : advert.id }) }}" title="{{ advert.author ~ " - " ~ advert.title ~ " - " ~advert.date|localizeddate('medium', 'none') }}">{{ advert.title }}
+        </a>
+        par {{ advert.author }}
+        le {{ advert.date|localizeddate('medium', 'none') }}
+      </li>
+    {% else %}
+      <li> Pas (encore !) d'annonces </li>
+    {% endfor %}
+  </ol>
+
+  <ol>
+    {# Utilisation de la méthode findByAuthorAndDate() du repository #}
+    <hr>
+    <h4>Liste des annonces de Potencier Fabien avant l'année 2017</h4>
+    {% for advert in listAdvertsFabien %}
+        <li>
+        <a href="{{ path('oc_platform_view', {'id' : advert.id }) }}" title="{{ advert.author ~ " - " ~ advert.title ~ " - " ~advert.date|date('d/m/Y') }}">{{ advert.title }}
+        </a>
+        par {{ advert.author }}
+        le {{ advert.date|date('d/m/Y') }}
+      </li>
+    {% else %}
+      <li> Pas (encore !) d'annonces </li>
+    {% endfor %}
+  </ol>
+
+{% endblock %}

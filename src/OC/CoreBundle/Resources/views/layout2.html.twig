@@ -1,0 +1,82 @@
+{# app/Resources/views/layout.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{% block title %}OC Plateforme{% endblock %}</title>
+  {% block favicon %}
+      <link rel="icon" href="https://bolt.cm/theme/bolt-v300/images/symfony_logo.png?59b03a9be7" type="image/png" />
+  {% endblock %}
+
+  {% block stylesheets %}
+    {# On charge le CSS de bootstrap depuis le site directement #}
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">   
+  {% endblock %}
+
+  {% stylesheets filter='cssrewrite, ?scssphp'
+    'bundles/ocplatform/css/*'
+    'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'
+  %}
+  <link rel="stylesheet" href="{{ asset_url }}" type="text/css">
+  {% endstylesheets %}
+
+</head>
+
+  <body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">OC Platforme</h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li role="presentation" class="active"> <a href="{{ path('oc_core_homepage') }}" > {{ 'Home'|trans }}</a></li>
+                  <li role="presentation"><a href="{{ path('oc_platform_home') }}">{{ 'Go to the platform'|trans }}</a></li>
+                  <li><a href="{{ path('oc_platform_list_adverts') }}">{{ 'List adverts with applicants'|trans }}</a></li>
+                  <li role="presentation"><a href="{{ path('oc_core_contactpage') }}">{{ 'Contact'|trans }}</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <h1 class="cover-heading">Cover your page.</h1>
+            <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
+            <p class="lead">
+              <a href="#" class="btn btn-lg btn-default">Learn more</a>
+            </p>
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+     {% javascripts filter='jsqueeze'
+          '//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'
+          'http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js'
+          '//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'  
+          'bundles/ocplatform/js/*'
+         %}
+            <script src={{ asset_url }} type="text/javascript"></script>  
+   {% endjavascripts %}
+  </body>
+</html>

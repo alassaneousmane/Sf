@@ -1,0 +1,3 @@
+oc_course_homepage:
+    path:     /jquery
+    defaults: { _controller: OCCourseBundle:Course:index }

@@ -1,0 +1,92 @@
+{# src/OC/PlatformBundle/Resources/view/Advert/view.html.twig #}
+
+{% extends "OCPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  {{ advert.title }} - {{ parent() }}
+{% endblock %}
+
+{% block ocplatform_body %}
+
+{% for message in app.session.flashbag.get('info') %}
+    <div class="alert alert-info" role="alert"><strong>Message flash :: </strong>  {{ message }} </div>
+{% endfor %}
+
+
+ {# On vérifie bien qu'une image est liée à l'annonce #}
+ {% if advert.image is not null %}
+
+  <a href="{{ asset(advert.image.webPath) }}">
+     <img src="{{ asset(advert.image.webPath) }}" alt="{{  advert.image.alt }}" title="{{ advert.image.alt ~ "-" ~ advert.image.id }}" height="180px" class="img-thumbnail" width="300px" />
+  </a>
+  {% else %}
+
+  <p>Aucune image n'est associée à cette annonce à priori </p>
+
+ {% endif %}
+
+  <h2>{{ advert.title }}</h2>
+  <i>Par {{ advert.author }} {% if advert.email is not null %} - <a href="mailto:{{ advert.email }}">{{ advert.email }}</a> {% endif %} - {{ advert.date|localizeddate('full', 'none') }}</i>
+
+  <div class="well">
+    {{ advert.content|raw }}
+  </div>
+  {# Affichage des compétences liées à l'annonce #}
+  {%  if listAdvertSkills is defined %}
+
+  {% if listAdvertSkills|length > 0 %}
+    {#  s'il y a au moins un élément dans ce tableau #}
+  <div>
+    Cette annonce requiert les compétences suivantes :
+    <ol>
+      {% for advertSkill in listAdvertSkills %}
+        <li><p class="alert alert-success"><strong>{{ advertSkill.skill.name }}</strong> : niveau <strong>{{ advertSkill.level }}</strong> - {{ advertSkill.advert.title }} - {{ advertSkill.advert.author }} - {{ advertSkill.advert.date|date('d/m/Y') }} </p></li>
+      {% endfor %}
+    </ol>
+  </div>
+{% else %}
+  <p class="alert alert-info">Aucune compétence n'est requise pour effectuer cette tâche.</p>
+{% endif %}
+{% endif %}
+
+  {# Affichage des catégories de l'annonce ici #}
+  {% if not advert.categories.empty %}
+    <p id="listeCategories">
+      Cette annonce est apparue dans les catégories suivants:
+      {%  for category in advert.categories %}
+        <a href="" class="">{{ category.name }}</a> {% if not loop.last %}, {% endif %}
+        {% if loop.last %}.{% endif %}
+      {% endfor %}
+    </p>
+  {% endif %}
+  {# Affichage des candidatures #}
+  {% if listApplications is defined %}
+  {% for application in listApplications %}
+    <p class="alert alert-danger"><i>{{ application.author }} </i> : {{ application.content }}</p>
+  {% endfor %}
+  {% endif %}
+
+  <p>
+    <a href="{{ path('oc_platform_home') }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+     {{ 'Retour à la liste'|trans }} 
+    </a>
+    {% if is_granted('ROLE_AUTEUR') %}
+    <a href="{{ path('oc_platform_edit', {'id': advert.id}) }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-edit"></i>
+     {% trans %} Modifier l'annonce {% endtrans %}
+    </a>
+     <a href="{{ path('oc_platform_add') }}" title="Ajouter une annonce" class="btn btn-default">
+           <i class="glyphicon glyphicon-plus"></i>&nbsp;{% trans %}Ajouter d'annonces{% endtrans %}</a>
+       
+    
+      <a href="{{ path('oc_platform_delete', {'id': advert.id}) }}" class="btn btn-danger">
+        <i class="glyphicon glyphicon-trash"></i>
+        {% trans %}Supprimer l'annonce {% endtrans %}
+    </a>
+    {% endif %}
+    
+        
+  </p>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{# src/OC/PlatformBundle/Resources/views/Advert/menu.html.twig #}
+
+{# Ce template n'hérite de personne,
+   tout comme le template inclus avec {{ include() }}. #}
+
+<ul class="nav nav-pills nav-stacked">
+
+	{# Affcihage du lien du FIC 2017 #}
+	<li><a href="{{ path('fic_2017_lille_grand_palais') }}" title="Voir FIC 2017 en détail"> FIC 2017</a></li>
+  
+  {% for advert in listAdverts %}
+    <li>
+   
+      <a href="{{ path('oc_platform_view', {'id': advert.id}) }}" title=" {{ advert.title ~ " - " ~ advert.id }}">
+          <img src="{% if advert.image is not null %} {{ asset(advert.image.webPath) }}" alt="{{  advert.image.alt }}" title="{{ advert.image.alt ~ "-" ~ advert.image.id }}" height="25px" width="25px" class="" {% endif %}  />
+          <span style="font-size: 13px;">{{ advert.title }}</span>
+        </a>
+        
+    </li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,29 @@
+{# src/OC/PlatformBundle/Resources/views/Advert/translation.html.twig #}
+
+<!doctype html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+    <title> {{ 'Hello'|trans({'%name%': 'ALASSANE', '%prenom%': 'Ousmane' }, 'messages' ) }}</title>
+</head>
+<body style="margin-top: 20px;">
+
+<h1>  {{ 'Hello'|trans({'%name%': 'ALASSANE', '%prenom%': 'Ousmane' }, 'messages') }} <br>
+</h1>
+
+{{ 'Bye'|trans }}
+
+<p>
+ {{ 'Bonjour'|trans({}, 'messages')}}
+    {% trans from 'messages' %}
+        Translate this text in french
+    {% endtrans %}
+</p>
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+</body>
+</html>

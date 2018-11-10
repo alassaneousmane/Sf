@@ -1,0 +1,55 @@
+{# src/OC/PlatformBundle/Resources/views/Advert/index.html.twig #}
+
+{% extends "OCCoreBundle::layout.html.twig" %}
+
+{% block title %}
+  Accueil - {{ parent() }}
+{% endblock %}
+
+{% block searchbox %}
+   {{ parent() }}
+{% endblock %}
+
+{% block advert_side %}
+	
+	{% for advert in listAdverts %}
+
+       	  <li><a href="{{ path('oc_platform_view', {id: advert.id} ) }}">{{ advert. title }}</a></li>           
+       
+    {% endfor %}
+       
+
+{% endblock %}
+
+
+{% block advert_vrac %}
+
+  {% for advert in listAdverts %}
+
+
+    <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>  <a href="{{ path('oc_platform_view', {id: advert.id} ) }}"> {{ advert. title }} </a> </h4>
+              <span class="text-muted"> postulé par {{ advert.author|upper }}  - {{ advert.date|localizeddate('medium', 'none') }} </span>
+    </div>        	  		  
+        
+       
+    {% endfor %}
+
+{% endblock %}
+
+
+{% block adverts_list %}
+{#
+	<a href="{{ asset(advert.image.webPath) }}">
+		     	<img src="{{ asset(advert.image.webPath) }}" alt="{{  advert.image.alt }}" title="{{ advert.image.alt ~ "-" ~ advert.image.id }}" height="85px" width="85px"  style="float: left; margin: 5px" />
+		 	 </a> #}
+    {% for advert in listAdverts %}
+             <a href="{{ path('oc_platform_view', {id: advert.id} ) }}"> <h3> {{ advert. title }} </h3> </a> <h5> posté par <strong>{{ advert.author }} - {{ advert.date|localizeddate('medium', 'none') }}</strong></h5>		  		  
+        
+        <hr>
+    {% endfor %}
+
+{% endblock %}
+
+

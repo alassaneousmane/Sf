@@ -1,0 +1,26 @@
+Hello: 'Bonjour %name% %prenom% !'
+'Translate this text in french': 'Traduire ce texte en français'
+Bye: 'Au revoir'
+Home: Accueil
+'Go to the platform': 'Accédez à la platforme'
+'List adverts with applicants': 'Liste des candidatures'
+Contact: 'Nous Contacter'
+'My advert online suppoort': 'Ma platforme d''annonces'
+'Delete adverts without applicants': 'Purger des annonces'
+'Participate with MOOC': 'Cliquer pour participer'
+'Add advert': 'Ajouter une annonce'
+Console: Terminal
+'This project is lead by Symfony,': 'Ce projet a été réalisé en collaboration avec SensioLabs'
+'and build with MOOC OpenClassrooms and SensioLabs.': 'et OpenClassrooms'
+Course: Cours
+advert.edit.title: 'Edition d''une annonce'
+advert.edit.submit_button: Valider
+advert.show.edit_button: 'Editer l''annonce'
+advert.show.create_button: 'Créer une nouvelle annonce'
+advert.nombre: '[0,1]Il y a %count% annonce|[2,+Inf]Il y a %count% annonces'
+'Aucune candidature': '__Aucune candidature'
+Bonjour: __Bonjour
+'Retour à la liste': '__Retour à la liste'
+'Modifier l''annonce': '__Modifier l''annonce'
+'Ajouter d''annonces': '__Ajouter d''annonces'
+'Supprimer l''annonce': '__Supprimer l''annonce'

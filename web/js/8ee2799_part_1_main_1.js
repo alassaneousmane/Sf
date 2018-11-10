@@ -1,0 +1,1 @@
+;$(document).ready(function(){$('#display-results').css({'width':'250px','color':'white','background-color':'black'});$('#searchbox').on('focus',function(){$(this).css({'background-color':'black','color':'white'})}).on('keypress',function(){})});

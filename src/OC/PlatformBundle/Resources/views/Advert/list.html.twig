@@ -1,0 +1,28 @@
+{# src/OC/PlatformBundle/Resources/views/Advert/list.html.twig #}
+
+{% extends "OCPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  Liste des annonces et les candidatures - {{ parent() }}
+{% endblock %}
+
+{% block ocplatform_body %}
+
+  <h2>Liste</h2>
+  <ol>
+    {% for item in listAdverts %}
+      <li><a href="{{ path('oc_platform_view', {'id' : item.id }) }}">
+        {{ item.title }}</a> - {{ item.date|date('d/m/Y')}}
+        <blockquote>
+          {{ item.author }} : {{ item.content|raw }}
+        </blockquote>
+      </li>
+    {% else %}
+         <p>Pas d'annonces et de candidatures à afficher pour le moment.</p>
+        
+    {% endfor %}
+      
+  </ol>
+
+
+{% endblock %}
